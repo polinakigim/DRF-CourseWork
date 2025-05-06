@@ -2,6 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from habit.models import Habit
+from habit.paginators import CustomPagination
 from habit.serializers import HabitSerializer
 from users.permissions import IsOwner
 
@@ -11,10 +12,7 @@ class HabitCreateAPIView(generics.CreateAPIView):
     queryset = Habit.objects.all()
 
     def perform_create(self, serializer):
-        habit = serializer.save()
-        habit.owner = self.request.user
-        habit.save()
-
+        serializer.save(owner=self.request.user)
 
 class HabitListAPIView(generics.ListAPIView):
     """Лист отображающий привычки конкретного пользователя."""
@@ -22,6 +20,7 @@ class HabitListAPIView(generics.ListAPIView):
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
     permission_classes = (IsOwner,)
+    pagination_class = CustomPagination
 
 
 class HabitPublicListAPIView(generics.ListAPIView):
@@ -29,6 +28,7 @@ class HabitPublicListAPIView(generics.ListAPIView):
 
     serializer_class = HabitSerializer
     queryset = Habit.objects.all()
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         queryset = Habit.objects.filter(is_public=True)
