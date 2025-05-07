@@ -2,13 +2,15 @@ from rest_framework import status
 from rest_framework.reverse import reverse
 from rest_framework.test import APITestCase
 
-from users.models import User
 from habit.models import Habit
+from users.models import User
 
 
 class HabitTestCase(APITestCase):
     def setUp(self):
-        self.user = User.objects.create_user(email="user@example.com", password="testpass")
+        self.user = User.objects.create_user(
+            email="user@example.com", password="testpass"
+        )
         self.client.force_authenticate(user=self.user)
 
         self.pleasant_habit = Habit.objects.create(
@@ -16,13 +18,13 @@ class HabitTestCase(APITestCase):
             action="Послушать музыку",
             is_habit_nice=True,
             duration=60,
-            periodicity=1
+            periodicity=1,
         )
 
         self.valid_data = {
             "action": "Сделать зарядку",
             "duration": 60,
-            "periodicity": 1
+            "periodicity": 1,
         }
 
     def test_create_habit_success(self):
@@ -42,7 +44,11 @@ class HabitTestCase(APITestCase):
 
     def test_create_with_nonpleasant_related_fails(self):
         not_pleasant = Habit.objects.create(
-            owner=self.user, action="Уборка", is_habit_nice=False, duration=30, periodicity=1
+            owner=self.user,
+            action="Уборка",
+            is_habit_nice=False,
+            duration=30,
+            periodicity=1,
         )
         url = reverse("habit:habit_create")
         data = self.valid_data.copy()

@@ -10,7 +10,6 @@ class PeriodicityValidator:
             raise ValidationError("Периодичность должна быть от 1 до 7 дней.")
 
 
-
 class DurationValidator:
     """Время выполнения должно быть не больше 120 секунд"""
 
@@ -39,9 +38,6 @@ class PleasantHabitValidator:
                 raise ValidationError(
                     "Приятная привычка не может иметь вознаграждение или связанную привычку."
                 )
-
-
-from rest_framework.exceptions import ValidationError
 
 
 class PrizeAndRelatedValidator:
